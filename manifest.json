@@ -7,7 +7,13 @@
   "content_scripts": [
     {
       "matches": ["http://localhost:9003/devtool/*"],
-      "js": ["index.js"]
+      "js": ["src/changeStyle.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/styles/custom.css"],
+      "matches": ["<all_urls>"]
     }
   ],
   "icons": {
