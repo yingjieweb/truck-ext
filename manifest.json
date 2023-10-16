@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "truck-ext",
+  "version": "0.0.1",
+  "description": "A Chrome extension for enhancing the thresh devtool function.",
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["http://localhost:9003/devtool/*"],
+      "js": ["index.js"]
+    }
+  ],
+  "icons": {
+    "16": "src/assets/icon16.png",
+    "48": "src/assets/icon48.png",
+    "128": "src/assets/icon128.png"
+  }
+}
