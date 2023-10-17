@@ -2,3 +2,18 @@ body {
   padding-left: 24px !important;
   padding-right: 24px !important;
 }
+
+#devtool-qrcode-trigger-btn {
+  padding: 10px 20px;
+  border: 1px solid #b3d8ff;
+  border-radius: 4px;
+  background: #ecf5ff;
+  color: #409eff;
+  cursor: pointer;
+  vertical-align: top;
+}
+#devtool-qrcode-trigger-btn:hover {
+  border-color: #409eff;
+  background: #409eff;
+  color: #fff;
+}
