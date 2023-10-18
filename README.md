@@ -5,8 +5,7 @@
 
 ## Features
 
-- ✨ Customize the style of the Thresh Devtool panel.
-- 💄 Support responsive height adjustment for the Thresh route `textarea`.
+- 💄 Customize the style of the Thresh Devtool panel.
 - 🔄 Enable automatic encoding of Thresh route parameters.
 
 ## Usage
