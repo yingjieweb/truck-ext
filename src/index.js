@@ -7,12 +7,11 @@ newBtn.id = "devtool-qrcode-trigger-btn";
 newBtn.addEventListener("click", () => {
   const textareaValue = textareaElement.value;
   const url = new URL(textareaValue);
-  for (const [paramName, paramValue] of url.searchParams) {
-    const encodedValue = encodeURIComponent(paramValue);
-    url.searchParams.set(paramName, encodedValue);
-  }
-  const encodedUrl = url.toString();
-  textareaElement.value = encodedUrl;
+  url.searchParams.forEach((paramValue, paramName) => {
+    url.searchParams.set(paramName, encodeURIComponent(paramValue));
+  });
+  const encodeOnceUrl = decodeURIComponent(url.toString());
+  textareaElement.value = encodeOnceUrl;
   oldBtn.click();
   textareaElement.value = textareaValue;
 });
