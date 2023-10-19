@@ -5,8 +5,9 @@
 
 ## Features
 
-- 💄 Customize the style of the Thresh Devtool panel.
+- 💄 Customize Thresh remote devtool Panel Style.
 - 🔄 Enable automatic encoding of Thresh route parameters.
+- 📂 Local Persistence of Thresh Route Values.
 
 ## Usage
 
