@@ -22,11 +22,16 @@ newBtn.id = "devtool-qrcode-trigger-btn";
 newBtn.addEventListener("click", () => {
   const textareaValue = textareaElement.value;
   const url = new URL(textareaValue);
-  url.searchParams.forEach((paramValue, paramName) => {
-    url.searchParams.set(paramName, encodeURIComponent(paramValue));
-  });
-  const encodeOnceUrl = decodeURIComponent(url.toString());
-  textareaElement.value = encodeOnceUrl;
+  const encodedSearchParams = Array.from(url.searchParams)
+    .map(
+      ([paramName, paramValue]) =>
+        `${paramName}=${encodeURIComponent(paramValue)}`
+    )
+    .join("&");
+  const encodeUrl = `${url.protocol}${url.pathname}${
+    encodedSearchParams ? "?" : ""
+  }${encodedSearchParams}`;
+  textareaElement.value = encodeUrl;
   oldBtn.click();
   textareaElement.value = textareaValue;
 });
