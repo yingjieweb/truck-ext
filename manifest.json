@@ -6,7 +6,7 @@
   "permissions": ["activeTab"],
   "content_scripts": [
     {
-      "matches": ["http://localhost:*/devtool/*"],
+      "matches": ["http://*:*/devtool/*"],
       "js": ["src/index.js", "src/changeStyle.js"]
     }
   ],
