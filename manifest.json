@@ -7,12 +7,12 @@
   "content_scripts": [
     {
       "matches": ["http://*:*/devtool/*"],
-      "js": ["src/index.js", "src/changeStyle.js"]
+      "js": ["src/content-scripts/threshDevtool/index.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/styles/custom.css"],
+      "resources": ["src/content-scripts/threshDevtool/style.css"],
       "matches": ["<all_urls>"]
     }
   ],
