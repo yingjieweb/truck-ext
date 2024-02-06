@@ -8,12 +8,20 @@
     {
       "matches": ["http://*:*/devtool/*"],
       "js": ["src/content-scripts/threshDevtool/index.js"]
+    },
+    {
+      "matches": ["https://dmpt.amh-group.com/*"],
+      "js": ["src/content-scripts/dmptNotify/index.js"]
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/content-scripts/threshDevtool/style.css"],
-      "matches": ["<all_urls>"]
+      "matches": ["<all_urls>"],
+      "resources": ["src/content-scripts/threshDevtool/style.css"]
+    },
+    {
+      "matches": ["https://dmpt.amh-group.com/*"],
+      "resources": ["src/content-scripts/dmptNotify/style.css"]
     }
   ],
   "icons": {

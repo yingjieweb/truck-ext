@@ -1,0 +1,16 @@
+#dmpt-notify-trigger-btn {
+  width: 100%;
+  padding: 8px 16px;
+  margin-top: 8px;
+  border: 1px solid #b3d8ff;
+  border-radius: 4px;
+  background: #ecf5ff;
+  color: #409eff;
+  cursor: pointer;
+  vertical-align: top;
+}
+#dmpt-notify-trigger-btn:hover {
+  border-color: #409eff;
+  background: #409eff;
+  color: #fff;
+}
