@@ -15,7 +15,7 @@
       "css": ["src/content-scripts/threshDevtool/style.css"]
     },
     {
-      "matches": ["https://dmpt.amh-group.com/*"],
+      "matches": ["https://*.com/dmpt/*"],
       "js": ["src/content-scripts/dmptNotify/index.js"],
       "css": ["src/content-scripts/dmptNotify/style.css"]
     }
