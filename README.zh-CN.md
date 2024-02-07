@@ -1,7 +1,7 @@
 <p align="center">
   <img style="width: 100px;" src="./src/assets/logo.png" alt="logo.png" />
 </p>
-<p align="center">一款增强 Thresh 开发者工具功能的 Chrome 扩展</p>
+<p align="center">一款增强 🧱 生态功能的 Chrome 扩展</p>
 
 ## Features
 

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "truck-ext",
   "version": "0.0.1",
-  "description": "A Chrome extension for enhancing the thresh devtool function.",
+  "description": "A Chrome extension for enhancing the 🧱 ecology functions.",
   "permissions": ["activeTab"],
   "background": {
     "service_worker": "src/background.js"

@@ -1,7 +1,7 @@
 <p align="center">
   <img style="width: 100px;" src="./src/assets/logo.png" alt="logo.png" />
 </p>
-<p align="center">A Chrome extension for enhancing the thresh devtool function.</p>
+<p align="center">A Chrome extension for enhancing the 🧱 ecology functions.</p>
 
 ## Features
 
