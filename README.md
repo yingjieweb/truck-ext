@@ -8,6 +8,7 @@
 - 💄 Customize Thresh remote devtool Panel Style.
 - 🔄 Enable automatic encoding of Thresh route parameters.
 - 📂 Local Persistence of Thresh Route Values.
+- 📢 Supports sending Dingding messages to alert merging branch.
 
 ## Usage
 
