@@ -1,14 +1,26 @@
+let isWaitDeployTabReady = false;
+let waitDeployTabReadyTimer;
+let dingMessagesInfo = {};
+
+const observer = new MutationObserver(() => {
+  tryAddNotificationBtn();
+  if (isWaitDeployTabReady) {
+    clearTimeout(waitDeployTabReadyTimer);
+    waitDeployTabReadyTimer = setTimeout(() => {
+      collectDeployInfo();
+      isWaitDeployTabReady = false;
+    }, 2000);
+  }
+});
+observer.observe(document, { childList: true, subtree: true });
+
 (() => {
   const isDynamicRelease = window.location.href.includes("publishPlanDynamic");
-  if (!isDynamicRelease) return; // publishPlanDynamic / appPublishPlan
-
-  addCustomStyles();
-  setTimeout(() => {
-    addNotification();
-  }, 1000);
+  if (!isDynamicRelease) return;
+  importCustomStyles();
 })();
 
-function addCustomStyles() {
+function importCustomStyles() {
   const link = document.createElement("link");
   link.rel = "stylesheet";
   link.type = "text/css";
@@ -16,21 +28,32 @@ function addCustomStyles() {
   document.head.appendChild(link);
 }
 
-function addNotification() {
-  const notificationBtn = document.createElement("button");
-  notificationBtn.textContent = "通知合并分支并上线";
-  notificationBtn.id = "dmpt-notify-trigger-btn";
-  notificationBtn.addEventListener("click", collectInfo, false);
-  const currentStatusElement = document.querySelector("p.ng-binding");
-  currentStatusElement.parentNode.addEventListener("click", () => {
-    setTimeout(() => {
-      document.querySelector("tbody.pointerTbody").append(notificationBtn);
-    }, 1000);
-  });
+function tryAddNotificationBtn() {
+  const statusSelectElement = document.querySelector(
+    ".transparentBorderTbody > tr:first-child button"
+  );
+  if (statusSelectElement?.onclick) {
+    statusSelectElement?.removeEventListener("click", addNotificationBtn);
+  } else {
+    statusSelectElement?.addEventListener("click", addNotificationBtn);
+  }
 }
 
-function collectInfo() {
-  toggleLoadingVisible(true);
+function addNotificationBtn() {
+  setTimeout(() => {
+    const statusOptionElement = document.querySelector("tbody.pointerTbody");
+    if (statusOptionElement?.children.length <= 2) {
+      const notificationBtn = document.createElement("button");
+      notificationBtn.textContent = "通知合并分支并上线";
+      notificationBtn.id = "dmpt-notify-trigger-btn";
+      notificationBtn.addEventListener("click", collectBaseInfo, false);
+      statusOptionElement.append(notificationBtn);
+    }
+  }, 200);
+}
+
+function collectBaseInfo() {
+  toggLoadingVisible(true);
   const releaseInfo = document.querySelector("h3.ng-binding")?.textContent;
   const formatedReleaseInfo = releaseInfo?.replace(/ /g, "");
   const formatedReleaseInfoList = formatedReleaseInfo.split("\n");
@@ -41,38 +64,29 @@ function collectInfo() {
   const operatePerson = document.querySelector(
     ".nav-tab-right span.ng-binding"
   )?.textContent;
-  const deployTabElement = document.querySelector("i.fa.fa-rocket");
-  deployTabElement.click();
-  setTimeout(() => {
-    const moduleNameList = document.querySelectorAll(
-      "tr.wrapTr.ng-scope > td:nth-child(3)"
-    );
-    const branchNameList = document.querySelectorAll(
-      "tr.wrapTr.ng-scope > td:nth-child(4)"
-    );
-    const pluginsInfo = Array.from(moduleNameList).map((item, index) => ({
-      module: item.textContent.replace(/ | \n/g, ""),
-      branch: branchNameList[index].textContent.replace(/ | \n/g, ""),
-    }));
-    if (!pluginsInfo.length) {
-      showMessage("failure", "未检测到关联的插件，无需发送通知");
-      toggleLoadingVisible(false)
-      return;
-    }
-    const message =
-      `### 检测到客户端插件有上线变更 \n` +
-      `- 发布计划：**[${releaseName}](${window.location.href})** \n` +
-      `- 发布日期：${releaseTime}  \n` +
-      `- 发布负责人：${releaseOwner} \n` +
-      `- 上线变更操作人：${operatePerson} \n` +
-      `- 上线变更时间：${getCurrentTime()} \n\n` +
-      `**本次发布涉及插件如下:** \n\n` +
-      `${pluginsInfo
-        .map((item) => `- 🧩 ${item.module} \n - 🌲 ${item.branch}`)
-        .join("\n")}` +
-      `请相关插件 owner 及时将上线的分支合并至 master!`;
-    notifyDing(message);
-  }, 2000);
+  dingMessagesInfo = { releaseName, releaseTime, releaseOwner, operatePerson };
+  document.querySelector("i.fa.fa-rocket")?.click();
+  isWaitDeployTabReady = true;
+}
+
+function collectDeployInfo() {
+  const moduleNameList = document.querySelectorAll(
+    "tr.wrapTr.ng-scope > td:nth-child(3)"
+  );
+  const branchNameList = document.querySelectorAll(
+    "tr.wrapTr.ng-scope > td:nth-child(4)"
+  );
+  const pluginsInfo = Array.from(moduleNameList).map((item, index) => ({
+    module: item.textContent.replace(/ | \n/g, ""),
+    branch: branchNameList[index].textContent.replace(/ | \n/g, ""),
+  }));
+  if (!pluginsInfo.length) {
+    showMessage("failure", "未检测到关联的插件，无需发送通知");
+    toggLoadingVisible(false);
+    return;
+  }
+  Object.assign(dingMessagesInfo, { pluginsInfo });
+  sendMessagesToDing();
 }
 
 function getCurrentTime() {
@@ -103,30 +117,45 @@ function padZero(num) {
   return num < 10 ? "0" + num : num;
 }
 
-function notifyDing(markdownText) {
+function sendMessagesToDing() {
+  const { releaseName, releaseTime, releaseOwner, operatePerson, pluginsInfo } =
+    dingMessagesInfo;
+  const text =
+    `### 检测到客户端插件有上线变更，注意合并分支! \n` +
+    `- 发布计划：**[${releaseName}](${window.location.href})** 🔍 \n` +
+    `- 发布日期：${releaseTime}  \n` +
+    `- 发布负责人：${releaseOwner} \n` +
+    `- 上线变更操作人：${operatePerson} \n` +
+    `- 上线变更时间：${getCurrentTime()} \n\n` +
+    `**本次发布涉及插件如下:** \n\n` +
+    `${pluginsInfo
+      .map((item) => `- 🧩 ${item.module} \n - 🌲 ${item.branch}`)
+      .join("\n")}` +
+    `请相关插件 owner 及时将上线的分支合并至 master!`;
   chrome.runtime.sendMessage(
     {
       msgtype: "markdown",
       markdown: {
         title: "检测到客户端插件有上线变更",
-        text: markdownText,
+        text,
       },
       at: {
         isAtAll: true,
       },
     },
     (data) => {
-      toggleLoadingVisible(false);
       if (data?.errcode === 0) {
         showMessage("success", "钉钉消息发送成功，请注意查收");
+        clickRealReleaseBtn();
       } else {
         showMessage("failure", data?.errmsg || "钉钉消息发送失败，请重试");
       }
+      toggLoadingVisible(false);
     }
   );
 }
 
-function toggleLoadingVisible(status) {
+function toggLoadingVisible(status) {
   if (status) {
     const loadingOverlayElement = document.createElement("div");
     loadingOverlayElement.id = "loading-overlay";
@@ -134,7 +163,6 @@ function toggleLoadingVisible(status) {
     loadingSpinnerElement.id = "loading-spinner";
     loadingOverlayElement.appendChild(loadingSpinnerElement);
     document.body.appendChild(loadingOverlayElement);
-    loadingOverlayElement.style.display = "block";
   } else {
     document.getElementById("loading-overlay").remove();
   }
@@ -152,4 +180,13 @@ function showMessage(type, text) {
   setTimeout(() => {
     messageContainerElement.remove();
   }, 3000);
+}
+
+function clickRealReleaseBtn() {
+  const bullhornTabElement = document.querySelector("i.fa.fa-bullhorn");
+  bullhornTabElement.click();
+  const realReleaseBtn = document.querySelector(
+    "tbody.pointerTbody > tr:nth-child(2)"
+  );
+  realReleaseBtn.click();
 }
