@@ -3,7 +3,7 @@
   "name": "truck-ext",
   "version": "0.1.0",
   "description": "A Chrome extension for enhancing the 🧱 ecology functions.",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "storage"],
   "action": {
     "default_popup": "src/popup/index.html",
     "default_icon": "src/assets/icon128.png"
