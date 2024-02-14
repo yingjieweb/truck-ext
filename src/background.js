@@ -1,6 +1,10 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  const token =
-    "3fa1405e30fe502547a6fc025bf0790db04abd42e807f5dbc30cdb406a160273";
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  const defaultToken = "8a4fe80adb14b7aef3cf7773c5639b9cf2199f57b350932f5672fdcdf170abc6";
+  const storageToken = await getSyncData("webhookToken")
+  const token = storageToken || defaultToken;
+  console.log({
+    defaultToken, storageToken
+  });
   const webhookUrl = `https://oapi.dingtalk.com/robot/send?access_token=${token}`;
 
   fetch(webhookUrl, {
@@ -26,3 +30,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   return true;
 });
+
+function getSyncData(key) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(key, (result) => {
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError);
+      } else {
+        resolve(result[key]);
+      }
+    });
+  });
+}
+
