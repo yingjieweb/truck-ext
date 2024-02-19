@@ -14,4 +14,5 @@
 
 - 下载存储库
 - 在 Chrome 中打开[扩展程序](chrome://extensions/)页面，激活开发者模式，加载未压缩的扩展程序
-- 打开 [Thresh 调试面板](http://localhost:9003/devtool/) 并通过 Chrome 浏览器访问 Thresh 开发者工具面板
+- 🚩 打开 [Thresh 调试面板](http://localhost:9003/devtool/) 并通过 Chrome 浏览器访问 Thresh 开发者工具面板
+- 🚩 打开 DMPT APP 动态升级计划，变更发布状态时，点击**通知合并分支并上线**

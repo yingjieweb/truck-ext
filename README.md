@@ -8,10 +8,11 @@
 - 💄 Customize Thresh remote devtool Panel Style.
 - 🔄 Enable automatic encoding of Thresh route parameters.
 - 📂 Local Persistence of Thresh Route Values.
-- 📢 Supports sending Dingding messages to alert merging branch.
+- 📢 Supports sending Dingding messages to alert merging branches.
 
 ## Usage
 
 - Download the repository.
 - Open the [Extensions page](chrome://extensions/) in Chrome, activate developer mode, and load the unzipped extension.
 - Open the [Thresh Devtool](http://localhost:9003/devtool/) and access the Thresh Devtool panel through the Chrome browser.
+- Open DMPT APP dynamic upgrade plan, change the release status, and click **Notify merge branch and online**
